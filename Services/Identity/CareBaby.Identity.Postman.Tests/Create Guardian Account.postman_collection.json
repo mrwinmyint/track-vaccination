@@ -1,0 +1,278 @@
+{
+	"info": {
+		"_postman_id": "dfc49019-39bf-4914-a1d7-28ec1c3ea2c3",
+		"name": "Create Guardian Account",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "2374598"
+	},
+	"item": [
+		{
+			"name": "Sign up",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response;\r",
+							"const responseJson = response.json();\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Sign up is succeeded\", function () {\r",
+							"    \r",
+							"    pm.expect(responseJson.Succeeded).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set(\"signup_response_confirmationemailtoken\", responseJson.ConfirmationEmailToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"FirstName\": \"{{signup_firstname}}\",\r\n    \"LastName\": \"{{signup_lastname}}\",\r\n    \"Email\": \"{{signup_email}}\",\r\n    \"Password\": \"{{signup_password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7041/v1/Account/SignUp",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7041",
+					"path": [
+						"v1",
+						"Account",
+						"SignUp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Confirm email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response;\r",
+							"const responseJson = response.json();\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Confirmed email is succeeded\", function () {\r",
+							"    \r",
+							"    pm.expect(responseJson.Succeeded).to.eql(true);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"{{confirmemail_email}}\",\r\n    \"token\": \"{{signup_response_confirmationemailtoken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7041/v1/Account/ConfirmEmail",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7041",
+					"path": [
+						"v1",
+						"Account",
+						"ConfirmEmail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response;\r",
+							"const responseJson = response.json();\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Sign in is succeeded\", function () {    \r",
+							"    pm.expect(responseJson.Succeeded).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Claims array has values\" + responseJson.Claims, function () {    \r",
+							"    pm.expect(responseJson.JwtToken.Claims).to.have.length > 0;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Claims name has correct value\", function () {    \r",
+							"    pm.expect(responseJson.JwtToken.Claims[0].Value).to.eql(pm.collectionVariables.get(\"signin_email\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Email\": \"{{signin_email}}\",\r\n    \"Password\": \"{{signin_password}}\",\r\n    \"IsPersistent\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:7041/v1/Account/SignIn",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7041",
+					"path": [
+						"v1",
+						"Account",
+						"SignIn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Guardians",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var response = pm.response;\r",
+							"const responseJson = response.json();\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Guardian list has values\" + responseJson.Claims, function () {    \r",
+							"    pm.expect(responseJson.lists).to.have.length > 0;\r",
+							"});\r",
+							"\r",
+							"//pm.test(\"firstName is matched\", function () {    \r",
+							"//   pm.expect(responseJson.lists[[responseJson.lists.length - 1]].firstName).to.eql(pm.collectionVariables.get(\"signup_firstname\"));\r",
+							"//});\r",
+							"\r",
+							"//pm.test(\"lastName is matched\", function () {    \r",
+							"//    pm.expect(responseJson.lists[[responseJson.lists.length - 1]].lastName).to.eql(pm.collectionVariables.get(\"signup_lastname\"));\r",
+							"//});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7041/v1/Guardians",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7041",
+					"path": [
+						"v1",
+						"Guardians"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "signup_firstname",
+			"value": "David",
+			"type": "string"
+		},
+		{
+			"key": "signup_lastname",
+			"value": "Jones",
+			"type": "string"
+		},
+		{
+			"key": "signup_email",
+			"value": "djones@test.com",
+			"type": "string"
+		},
+		{
+			"key": "signup_password",
+			"value": "DJones@9999",
+			"type": "string"
+		},
+		{
+			"key": "signin_email",
+			"value": "djones@test.com",
+			"type": "string"
+		},
+		{
+			"key": "signin_password",
+			"value": "DJones@9999",
+			"type": "string"
+		},
+		{
+			"key": "confirmemail_email",
+			"value": "djones@test.com",
+			"type": "string"
+		},
+		{
+			"key": "signup_response_confirmationemailtoken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
