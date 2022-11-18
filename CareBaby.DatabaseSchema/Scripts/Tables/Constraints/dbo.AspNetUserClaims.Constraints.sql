@@ -1,0 +1,7 @@
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[AspNetUserClaims]') AND name = N'PK_AspNetUserClaims')
+BEGIN
+	ALTER TABLE [dbo].[AspNetUserClaims]
+	ADD CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY CLUSTERED(Id ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF ) ON [PRIMARY]
+	PRINT 'Created index [PK_AspNetUserClaims]'
+END
+GO

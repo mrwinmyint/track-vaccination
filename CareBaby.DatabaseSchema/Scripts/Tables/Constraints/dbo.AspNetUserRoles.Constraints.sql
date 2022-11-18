@@ -1,0 +1,7 @@
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[AspNetUserRoles]') AND name = N'PK_AspNetUserRoles')
+BEGIN
+	ALTER TABLE [dbo].[AspNetUserRoles]
+	ADD CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY CLUSTERED(UserId ASC, RoleId ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF ) ON [PRIMARY]
+	PRINT 'Created index [PK_AspNetUserRoles]'
+END
+GO

@@ -1,0 +1,7 @@
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[RefreshToken]') AND name = N'PK_RefreshToken')
+BEGIN
+	ALTER TABLE [dbo].[RefreshToken]
+	ADD CONSTRAINT [PK_RefreshToken] PRIMARY KEY CLUSTERED(Id ASC) WITH (PAD_INDEX = OFF, ALLOW_PAGE_LOCKS = ON, ALLOW_ROW_LOCKS = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF ) ON [PRIMARY]
+	PRINT 'Created index [PK_RefreshToken]'
+END
+GO
